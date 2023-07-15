@@ -3,3 +3,4 @@ auxilliary_data/
 emnlp_pragtag2023_domain_adapted/
 wandb/
 .ipynb_checkpoints/
+__pycache__/
