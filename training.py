@@ -120,23 +120,26 @@ def train_and_infer_func(train_df,valid_df,test_df):
         .map(tokenize, batched=True)
 
         # fine-tuning
+        batch_size = 10
+        gradient_accumulation_steps = 2
+        epochs=30
         training_args = TrainingArguments(
         output_dir=f"emnlp_pragtag2023_finetuned_split_{idx}",
         overwrite_output_dir=True,
         evaluation_strategy="steps",
-        logging_steps=len(train_ds) // 16,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=2 * 8,
-        gradient_accumulation_steps=2,
+        logging_steps=len(train_ds) // (batch_size),
+        per_device_train_batch_size=batch_size,
+        per_device_eval_batch_size=2*batch_size,
+        gradient_accumulation_steps=gradient_accumulation_steps,
         learning_rate=2e-5,
         weight_decay=0.01,
         adam_epsilon=1e-6,
-        num_train_epochs=30,
+        num_train_epochs=epochs,
         warmup_ratio=0.1,
         save_total_limit=4,
         push_to_hub=True,
         save_strategy="steps",
-        save_steps=len(train_ds) // 16,
+        save_steps=len(train_ds) // (batch_size),
         run_name=model_name.split("/")[-1]+f"_split_{idx}",
         metric_for_best_model="eval_loss",
         load_best_model_at_end=True,
@@ -151,7 +154,6 @@ def train_and_infer_func(train_df,valid_df,test_df):
         args=training_args,
         train_dataset=data_dict["train"],
         eval_dataset=data_dict["valid"],
-        # data_collator=data_collator,
         )
 
         trainer.train()

@@ -26,4 +26,5 @@ if __name__ == "__main__":
     inpath = args.input
     outpath = args.output
 
-    main(pjoin(inpath, "res", "predicted.json"), pjoin(inpath, "ref", "test_labels.json"), pjoin(outpath, "scores.txt"))
+#    main(pjoin(inpath, "res", "predicted.json"), pjoin(inpath, "ref", "test_labels.json"), pjoin(outpath, "scores.txt"))
+    main(pjoin(inpath,  "inference_predicted.json"), pjoin(inpath, "test_labels.json"), pjoin(outpath, "scores.txt"))
