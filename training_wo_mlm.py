@@ -140,7 +140,7 @@ def train_and_infer_func(train_df,valid_df,test_df):
         push_to_hub=True,
         save_strategy="steps",
         save_steps=len(train_ds) // (batch_size),
-        run_name=model_name.split("/")[-1]+f"_split_{idx}",
+        run_name=model_name.split("/")[-1]+f"_wo_mlm_split_{idx}",
         metric_for_best_model="eval_loss",
         load_best_model_at_end=True,
         greater_is_better=False,

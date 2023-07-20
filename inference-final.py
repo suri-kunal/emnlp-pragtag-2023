@@ -68,7 +68,8 @@ tokenizer = AutoTokenizer.from_pretrained(
 
 model_dict = {}
 for split in range(5):
-    model_name = f"suryakiran786/emnlp_pragtag2023_finetuned_test_split_{split}"
+    model_name = f"suryakiran786/emnlp_pragtag2023_finetuned_wo_mlm_split_{split}"
+    
     model = AutoModelForSequenceClassification.from_pretrained(model_name,
                                                                num_labels=len(CLASS_MAP),
                                                                problem_type="single_label_classification",
@@ -137,12 +138,9 @@ if __name__ == "__main__":
 
         for split in range(5):            
 
-            try:
-                batch_outputs = create_preds(split,batch_inputs)
+            batch_outputs = create_preds(split,batch_inputs)
             
-                list_of_predictions.append(batch_outputs.logits[None,:])
-            except Exception as e:
-                print(e)
+            list_of_predictions.append(batch_outputs.logits[None,:])
 
         final_predictions = torch.cat(list_of_predictions, dim=0)
 

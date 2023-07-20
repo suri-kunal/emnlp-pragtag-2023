@@ -57,7 +57,7 @@ def preprocess(item):
 
 # tokenizer
 tokenizer = "microsoft/deberta-base"
-model_name = "suryakiran786/emnlp_pragtag2023_domain_adapted"
+model_name = "./emnlp_pragtag2023_domain_adapted"
 tokenizer = AutoTokenizer.from_pretrained(tokenizer,do_lower_case=True, force_download=True)
 
 def get_model():
@@ -122,7 +122,7 @@ def train_and_infer_func(train_df,valid_df,test_df):
         # fine-tuning
         batch_size = 10
         gradient_accumulation_steps = 2
-        epochs=30
+        epochs=60
         training_args = TrainingArguments(
         output_dir=f"emnlp_pragtag2023_finetuned_split_{idx}",
         overwrite_output_dir=True,
@@ -135,7 +135,7 @@ def train_and_infer_func(train_df,valid_df,test_df):
         weight_decay=0.01,
         adam_epsilon=1e-6,
         num_train_epochs=epochs,
-        warmup_ratio=0.1,
+        warmup_ratio=0.3,
         save_total_limit=4,
         push_to_hub=True,
         save_strategy="steps",

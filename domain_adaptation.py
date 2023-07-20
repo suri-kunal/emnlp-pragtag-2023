@@ -97,7 +97,7 @@ abstract_hf_dataset = datasets.DatasetDict(
 # In[11]:
 
 
-model_name = "microsoft/deberta-base"
+model_name = "microsoft/deberta-large"
 tokenizer = AutoTokenizer.from_pretrained(
     model_name, do_lower_case=True, force_download=True
 )
@@ -180,11 +180,11 @@ from transformers import Trainer, TrainingArguments
 # In[21]:
 
 
-batch_size = 8
-gradient_accumulation_steps = 2
+batch_size = 2
+gradient_accumulation_steps = 8
 num_epochs = 100
 training_args = TrainingArguments(
-    output_dir="emnlp_pragtag2023_domain_adapted",
+    output_dir=f"emnlp_pragtag2023_{model_name.split('/')[-1]}",
     overwrite_output_dir=True,
     evaluation_strategy="epoch",
     per_device_train_batch_size=batch_size,
@@ -203,8 +203,9 @@ training_args = TrainingArguments(
     load_best_model_at_end=True,
     greater_is_better=False,
     report_to="wandb",
-    hub_strategy="checkpoint",
-    hub_private_repo=True
+    hub_strategy="end",
+    hub_private_repo=True,
+    gradient_checkpointing=False
 )
 
 trainer = Trainer(
@@ -216,6 +217,7 @@ trainer = Trainer(
 )
 
 trainer.train()
+trainer.push_to_hub()
 
 
 # In[ ]:
