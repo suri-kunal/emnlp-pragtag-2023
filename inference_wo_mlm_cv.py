@@ -57,7 +57,7 @@ def preprocess(item):
 
 # tokenizer
 tokenizer = "microsoft/deberta-base"
-model_name = "suryakiran786/emnlp_pragtag2023_domain_adapted"
+model_name = "microsoft/deberta-base"
 tokenizer = AutoTokenizer.from_pretrained(tokenizer,do_lower_case=True, force_download=True)
 
 def get_model():
@@ -120,25 +120,33 @@ def train_and_infer_func(train_df,valid_df,test_df):
         .map(tokenize, batched=True)
 
         # fine-tuning
+        batch_size = 10
+        gradient_accumulation_steps = 2
+        epochs=60
         training_args = TrainingArguments(
-        output_dir=f"emnlp_pragtag2023_finetuned_split_{idx}",
+        output_dir=f"emnlp_pragtag2023_finetuned_wo_mlm_split_{idx}",
         overwrite_output_dir=True,
         evaluation_strategy="steps",
-        logging_steps=len(train_ds) // 16,
-        per_device_train_batch_size=8,
-        per_device_eval_batch_size=2 * 8,
-        gradient_accumulation_steps=2,
+        logging_steps=len(train_ds) // (batch_size),
+        per_device_train_batch_size=batch_size,
+        per_device_eval_batch_size=2*batch_size,
+        gradient_accumulation_steps=gradient_accumulation_steps,
         learning_rate=2e-5,
         weight_decay=0.01,
         adam_epsilon=1e-6,
-        num_train_epochs=60,
+        num_train_epochs=epochs,
         warmup_ratio=0.1,
         save_total_limit=4,
+        push_to_hub=True,
         save_strategy="steps",
-        save_steps=len(train_ds) // 16,
+        save_steps=len(train_ds) // (batch_size),
+        run_name=model_name.split("/")[-1]+f"_wo_mlm_split_{idx}",
         metric_for_best_model="eval_loss",
         load_best_model_at_end=True,
         greater_is_better=False,
+        report_to="wandb",
+        hub_strategy="end",
+        hub_private_repo=True
         )
 
         trainer = Trainer(
@@ -146,7 +154,6 @@ def train_and_infer_func(train_df,valid_df,test_df):
         args=training_args,
         train_dataset=data_dict["train"],
         eval_dataset=data_dict["valid"],
-        # data_collator=data_collator,
         )
 
         trainer.train()
@@ -160,7 +167,7 @@ def train_and_infer_func(train_df,valid_df,test_df):
 
         r = predictions_to_evaluation_format(prediction_list)
 
-        pred_path = f"predicted_split_{idx}.json"
+        pred_path = f"predicted_wo_mlm_split_{idx}.json"
         with open(pred_path, "w+") as f:
             json.dump(r, f, indent=4)
 
@@ -173,14 +180,14 @@ def train_and_infer_func(train_df,valid_df,test_df):
             if elem["id"] in id_list:
                 test_dict_data.append(elem)
 
-        gold_path = f"gold_data_split_{idx}.json"
+        gold_path = f"gold_data_wo_split_split_{idx}.json"
         with open(gold_path,"w") as f:
             json.dump(test_dict_data,f,indent=4)
 
         pred, gold = load_prediction_and_gold(pred_path, gold_path)
         per_domain, mean = eval_across_domains(gold, pred)
 
-        out_path = f"scores_split_{idx}.txt"
+        out_path = f"scores_wo_mlm_split_{idx}.txt"
         with open(out_path, "w+") as f:
             for k, v in per_domain.items():
                 f.write(f"f1_{k}:{v}\n")
