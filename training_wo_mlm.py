@@ -122,7 +122,7 @@ def train_and_infer_func(train_df,valid_df,test_df):
         # fine-tuning
         batch_size = 10
         gradient_accumulation_steps = 2
-        epochs=30
+        epochs=60
         training_args = TrainingArguments(
         output_dir=f"emnlp_pragtag2023_finetuned_wo_mlm_split_{idx}",
         overwrite_output_dir=True,
