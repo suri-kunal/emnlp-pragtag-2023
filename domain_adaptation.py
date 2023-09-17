@@ -97,7 +97,7 @@ abstract_hf_dataset = datasets.DatasetDict(
 # In[11]:
 
 
-model_name = "microsoft/deberta-large"
+model_name = "microsoft/deberta-base"
 tokenizer = AutoTokenizer.from_pretrained(
     model_name, do_lower_case=True, force_download=True
 )
