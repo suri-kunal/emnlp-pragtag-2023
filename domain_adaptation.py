@@ -18,9 +18,9 @@ from transformers import (
 
 
 # %%
-os.environ["WANDB_API_KEY"] = "23e6940ba17fe0fd2bf2616685c3978f2ce87d7b"
+os.environ["WANDB_API_KEY"] = "get_your_own"
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
-hf_hub.login("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", add_to_git_credential=True)
+hf_hub.login("get_your_own", add_to_git_credential=True)
 os.environ["WANDB_PROJECT"] = "emnlp_pragtag_2023"
 
 
@@ -97,7 +97,7 @@ abstract_hf_dataset = datasets.DatasetDict(
 # In[11]:
 
 
-model_name = "microsoft/deberta-large"
+model_name = "microsoft/deberta-base"
 tokenizer = AutoTokenizer.from_pretrained(
     model_name, do_lower_case=True, force_download=True
 )
