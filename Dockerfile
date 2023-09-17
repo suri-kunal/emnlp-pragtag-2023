@@ -1,4 +1,4 @@
-FROM nvcr.io/nvidia/pytorch:23.06-py3
+FROM python:3.8-slim-buster
 
 WORKDIR /workspace
 

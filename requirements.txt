@@ -2,3 +2,12 @@ transformers
 datasets
 wandb
 accelerate
+nltk
+notebook
+scikit-learn
+pandas
+wandb
+Pillow
+matplotlib
+tqdm
+seaborn
