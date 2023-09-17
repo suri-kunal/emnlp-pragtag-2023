@@ -8,6 +8,8 @@ In order to reproduce the results given in the paper, you need to install all li
    4. To get the predictions after Step 2, execute inference_w_mlm.py
    5. To get the predictions after Step 3, execute inference_wo_mlm.py
    6. Use Word_Distribution_Analysis.ipynb to generate charts in the "PragTag 2023 - Vocabulary Analysis" paper.
+   7. To obtain performance of model fined tuned on model pre-trained with MLM on out of split data, execute inference_w_mlm_cv.py
+   8. To obtain performance of model fined tuned without pre-training on MLM on out of split data, execute inference_wo_mlm_cv.py
 
 2. Inference -
    1. To get the predictions from models trained after MLM pre-training, execute inference_w_mlm.py
