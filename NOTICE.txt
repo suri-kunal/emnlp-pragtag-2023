@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+public_data/test_inputs.json
+public_data/train_inputs_full.json
+public_data/train_inputs_low.json
+public_secret/test_inputs.json
+
+Copyright 2023
+Ubiquitous Knowledge Processing (UKP) Lab
+Technische Universität Darmstadt
+
+-------------------------------------------------------------------------------
